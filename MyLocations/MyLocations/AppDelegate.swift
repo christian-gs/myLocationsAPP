@@ -18,7 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let window = UIWindow(frame: UIScreen.main.bounds)
         
         let tabController = UITabBarController()
-        tabController.viewControllers = [FirstViewController(), SecondViewController()]
+        let CurrentLocationViewController = CurrentLocationController()
+        CurrentLocationViewController.tabBarItem = UITabBarItem(title: "First", image: #imageLiteral(resourceName: "first") , selectedImage: #imageLiteral(resourceName: "first") )
+        let secondViewController = SecondViewController()
+        secondViewController.tabBarItem = UITabBarItem(title: "Second", image: #imageLiteral(resourceName: "second") , selectedImage: #imageLiteral(resourceName: "second"))
+        tabController.viewControllers = [CurrentLocationViewController, secondViewController]
         
         window.rootViewController = tabController
         window.makeKeyAndVisible()

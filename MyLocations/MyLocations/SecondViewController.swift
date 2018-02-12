@@ -13,7 +13,6 @@ class SecondViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.green
-        self.tabBarItem = UITabBarItem(title: "Second", image: #imageLiteral(resourceName: "second") , selectedImage: #imageLiteral(resourceName: "second"))
     }
 
 
