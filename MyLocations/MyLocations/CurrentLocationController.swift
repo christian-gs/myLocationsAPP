@@ -10,7 +10,8 @@ import UIKit
 import CoreLocation
 
 class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
-    
+
+    //UIViews
     private var messageLabel = UILabel()
     private var latitudeTextLabel = UILabel()
     private var longitudeTextLabel = UILabel()
@@ -19,18 +20,25 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
     private var addressLabel = UILabel()
     private var tagButton = UIButton()
     private var getButton = UIButton()
-
+    //user location
     private let locationManager = CLLocationManager()
     private var location: CLLocation?
     private var updatingLocation = false
     private var lastLocationError: Error?
+    //reverse geocoding (turn lat & longitude to an actual address)
+    let geocoder = CLGeocoder()
+    var placemark: CLPlacemark?
+    var performingReverseGeocoding = false
+    var lastGeocodingError: Error?
+    // used to time out a location request if it taskes to long
+    var timer: Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         edgesForExtendedLayout = []
 
-        messageLabel.text = "(Message Label)"
+        messageLabel.text = "Tap 'Get My Location' to Start"
         messageLabel.textAlignment = .center
         latitudeTextLabel.text = "Latitude: "
         latitudeTextLabel.textAlignment = .left
@@ -106,6 +114,8 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
         } else {
             location = nil
             lastLocationError = nil
+            placemark = nil
+            lastGeocodingError = nil
             startLocationManager()
         }
         updateLabels()
@@ -117,6 +127,15 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
             longitudeValueLabel.text = String(format: "%.8f", location.coordinate.longitude)
             tagButton.isHidden = false
             messageLabel.text = ""
+            if let placemark = placemark {
+                addressLabel.text = string(from: placemark)
+            } else if performingReverseGeocoding {
+                addressLabel.text = "Searching for Address..."
+            } else if lastGeocodingError != nil {
+                addressLabel.text = "Error Finding Address"
+            } else {
+                addressLabel.text = "No Address Found"
+            }
         } else {
             latitudeValueLabel.text = ""
             longitudeValueLabel.text = ""
@@ -141,6 +160,25 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
         configureGetButton()
     }
 
+    func string(from placemark: CLPlacemark) -> String {
+        var line1 = ""
+        if let s = placemark.subThoroughfare {
+            line1 += s + " "
+        }
+        if let s = placemark.thoroughfare {
+            line1 += s }
+        var line2 = ""
+        if let s = placemark.locality {
+            line2 += s + " "
+        }
+        if let s = placemark.administrativeArea {
+            line2 += s + " "
+        }
+        if let s = placemark.postalCode {
+            line2 += s }
+        return line1 + "\n" + line2
+    }
+
     func configureGetButton() {
         if updatingLocation {
             getButton.setTitle("Stop", for: .normal)
@@ -155,6 +193,9 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.startUpdatingLocation()
             updatingLocation = true
+            //set timer for 60 seconds after which the app will stop attempting to retrieve user location
+            timer = Timer.scheduledTimer(timeInterval: 60, target: self,
+                                         selector: #selector(didTimeOut), userInfo: nil, repeats: false)
         }
     }
 
@@ -163,8 +204,19 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
             locationManager.stopUpdatingLocation()
             locationManager.delegate = nil
             updatingLocation = false
+            if let timer = timer {
+                timer.invalidate()
+            }
         }
+    }
 
+    @objc func didTimeOut() {
+        print("*** Time out")
+        if location == nil {
+            stopLocationManager()
+            lastLocationError = NSError( domain: "MyLocationsErrorDomain", code: 1, userInfo: nil)
+            updateLabels()
+        }
     }
 
     // MARK: - CLLocationManagerDelegate
@@ -180,22 +232,52 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let newLocation = locations.last!
         print("didUpdateLocations \(newLocation)")
-        guard newLocation.timestamp.timeIntervalSinceNow < -5
-        else {
-            guard newLocation.horizontalAccuracy < 0
-            else {
-                if location == nil || location!.horizontalAccuracy > newLocation.horizontalAccuracy {
-                    lastLocationError = nil
-                    location = newLocation
-                    if newLocation.horizontalAccuracy <= locationManager.desiredAccuracy {
-                        print("*** We're done!")
-                        stopLocationManager()
-                    }
-                    updateLabels()
+        // only update location if its been at least 5 seconds from last update
+        guard newLocation.timestamp.timeIntervalSinceNow > -5 else { return }
+        // filter out invalid location updates
+        guard newLocation.horizontalAccuracy >= 0 else { return }
+
+
+        var distance = CLLocationDistance(Double.greatestFiniteMagnitude)
+        if let location = location {
+            distance = newLocation.distance(from: location)
+        }
+
+        // only update if current location hasnt been retrieved or the new update is more accurate
+        if location == nil || location!.horizontalAccuracy > newLocation.horizontalAccuracy {
+            lastLocationError = nil
+            location = newLocation
+            if newLocation.horizontalAccuracy <= locationManager.desiredAccuracy {
+                print("*** We're done!")
+                stopLocationManager()
+                if distance > 0 {
+                    performingReverseGeocoding = false
                 }
-                return
             }
-            return
+            updateLabels()
+            // Reverse Geocoding
+            if !performingReverseGeocoding {
+                print("*** Going to geocode")
+                performingReverseGeocoding = true
+                geocoder.reverseGeocodeLocation(newLocation, completionHandler: { (placemarks: [CLPlacemark]?, error: Error?) in
+                    self.lastGeocodingError = error
+                    if error == nil, let p = placemarks, !p.isEmpty {
+                        self.placemark = p.last!
+                    } else {
+                        self.placemark = nil
+                    }
+                    self.performingReverseGeocoding = false
+                    self.updateLabels()
+                })
+            }
+        }
+        else if distance < 1 {
+            let timeInterval = newLocation.timestamp.timeIntervalSince(location!.timestamp)
+            if timeInterval > 10 {
+                print("*** Force done!")
+                stopLocationManager()
+                updateLabels()
+            }
         }
     }
 
@@ -204,8 +286,7 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
             title: "Location Services Disabled",
             message: "Please enable location services for this app in Settings.",
             preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default,
-                                     handler: nil)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         present(alert, animated: true, completion: nil)
         alert.addAction(okAction)
     }
