@@ -54,6 +54,7 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
         tagButton.setTitle("Tag Location", for: .normal)
         tagButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         tagButton.isHidden = true
+        tagButton.addTarget(self, action: #selector(openTagLocationViewController), for: .touchUpInside)
         getButton.setTitle("Get My Location", for: .normal)
         getButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         getButton.addTarget(self, action: #selector(getLocation), for: .touchUpInside)
@@ -94,6 +95,11 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
             getButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             getButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30)
         ])
+    }
+
+    @objc func openTagLocationViewController() {
+        let tagLocationController = UINavigationController(rootViewController: TagLocationViewController(style: .grouped))
+        present(tagLocationController, animated: true, completion: nil)
     }
 
     @objc func getLocation() {

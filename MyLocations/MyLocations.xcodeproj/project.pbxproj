@@ -9,19 +9,25 @@
 /* Begin PBXBuildFile section */
 		AA1D4A0D202D64FD00E6221D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D4A0C202D64FD00E6221D /* AppDelegate.swift */; };
 		AA1D4A0F202D64FD00E6221D /* CurrentLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D4A0E202D64FD00E6221D /* CurrentLocationController.swift */; };
-		AA1D4A11202D64FD00E6221D /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D4A10202D64FD00E6221D /* SecondViewController.swift */; };
+		AA1D4A11202D64FD00E6221D /* TagLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D4A10202D64FD00E6221D /* TagLocationViewController.swift */; };
 		AA1D4A16202D64FD00E6221D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA1D4A15202D64FD00E6221D /* Assets.xcassets */; };
 		AA1D4A21202D6AD600E6221D /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA1D4A20202D6AD600E6221D /* Launch Screen.storyboard */; };
+		AA3F3FB62031645700920014 /* IconTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3F3FB42031645700920014 /* IconTableViewCell.swift */; };
+		AA3F3FB72031645700920014 /* DoubleLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3F3FB52031645700920014 /* DoubleLabelTableViewCell.swift */; };
+		AA3F3FB9203164DB00920014 /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3F3FB8203164DB00920014 /* TextViewTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		AA1D4A09202D64FD00E6221D /* MyLocations.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyLocations.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA1D4A0C202D64FD00E6221D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA1D4A0E202D64FD00E6221D /* CurrentLocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationController.swift; sourceTree = "<group>"; };
-		AA1D4A10202D64FD00E6221D /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		AA1D4A10202D64FD00E6221D /* TagLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagLocationViewController.swift; sourceTree = "<group>"; };
 		AA1D4A15202D64FD00E6221D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA1D4A1A202D64FD00E6221D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA1D4A20202D6AD600E6221D /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		AA3F3FB42031645700920014 /* IconTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconTableViewCell.swift; sourceTree = "<group>"; };
+		AA3F3FB52031645700920014 /* DoubleLabelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleLabelTableViewCell.swift; sourceTree = "<group>"; };
+		AA3F3FB8203164DB00920014 /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,9 +60,12 @@
 		AA1D4A0B202D64FD00E6221D /* MyLocations */ = {
 			isa = PBXGroup;
 			children = (
+				AA3F3FB8203164DB00920014 /* TextViewTableViewCell.swift */,
+				AA3F3FB52031645700920014 /* DoubleLabelTableViewCell.swift */,
+				AA3F3FB42031645700920014 /* IconTableViewCell.swift */,
 				AA1D4A0C202D64FD00E6221D /* AppDelegate.swift */,
 				AA1D4A0E202D64FD00E6221D /* CurrentLocationController.swift */,
-				AA1D4A10202D64FD00E6221D /* SecondViewController.swift */,
+				AA1D4A10202D64FD00E6221D /* TagLocationViewController.swift */,
 				AA1D4A15202D64FD00E6221D /* Assets.xcassets */,
 				AA1D4A1A202D64FD00E6221D /* Info.plist */,
 				AA1D4A20202D6AD600E6221D /* Launch Screen.storyboard */,
@@ -135,8 +144,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA1D4A11202D64FD00E6221D /* SecondViewController.swift in Sources */,
+				AA1D4A11202D64FD00E6221D /* TagLocationViewController.swift in Sources */,
 				AA1D4A0D202D64FD00E6221D /* AppDelegate.swift in Sources */,
+				AA3F3FB72031645700920014 /* DoubleLabelTableViewCell.swift in Sources */,
+				AA3F3FB9203164DB00920014 /* TextViewTableViewCell.swift in Sources */,
+				AA3F3FB62031645700920014 /* IconTableViewCell.swift in Sources */,
 				AA1D4A0F202D64FD00E6221D /* CurrentLocationController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
