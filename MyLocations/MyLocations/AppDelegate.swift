@@ -18,11 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let window = UIWindow(frame: UIScreen.main.bounds)
         
         let tabController = UITabBarController()
-        let CurrentLocationViewController = CurrentLocationController()
-        CurrentLocationViewController.tabBarItem = UITabBarItem(title: "Location", image: #imageLiteral(resourceName: "first") , selectedImage: #imageLiteral(resourceName: "first") )
-        let tagLocationViewController = TagLocationViewController(style: .grouped)
-        tagLocationViewController.tabBarItem = UITabBarItem(title: "Tag", image: #imageLiteral(resourceName: "second") , selectedImage: #imageLiteral(resourceName: "second"))
-        tabController.viewControllers = [CurrentLocationViewController, tagLocationViewController]
+        let currentLocationViewController = CurrentLocationController()
+        currentLocationViewController.tabBarItem = UITabBarItem(title: "Location", image: #imageLiteral(resourceName: "first") , selectedImage: #imageLiteral(resourceName: "first") )
+        tabController.viewControllers = [currentLocationViewController]
         
         window.rootViewController = tabController
         window.makeKeyAndVisible()

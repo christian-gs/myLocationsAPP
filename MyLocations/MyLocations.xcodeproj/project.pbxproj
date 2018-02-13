@@ -7,17 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA1BAD7220327E40006C43FF /* CategoryPickerViewControllerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1BAD7120327E40006C43FF /* CategoryPickerViewControllerTableViewController.swift */; };
+		AA1BAD74203298A6006C43FF /* HudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1BAD73203298A6006C43FF /* HudView.swift */; };
 		AA1D4A0D202D64FD00E6221D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D4A0C202D64FD00E6221D /* AppDelegate.swift */; };
 		AA1D4A0F202D64FD00E6221D /* CurrentLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D4A0E202D64FD00E6221D /* CurrentLocationController.swift */; };
 		AA1D4A11202D64FD00E6221D /* TagLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D4A10202D64FD00E6221D /* TagLocationViewController.swift */; };
 		AA1D4A16202D64FD00E6221D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA1D4A15202D64FD00E6221D /* Assets.xcassets */; };
 		AA1D4A21202D6AD600E6221D /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA1D4A20202D6AD600E6221D /* Launch Screen.storyboard */; };
-		AA3F3FB62031645700920014 /* IconTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3F3FB42031645700920014 /* IconTableViewCell.swift */; };
+		AA3F3FB62031645700920014 /* SelectViaViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3F3FB42031645700920014 /* SelectViaViewTableViewCell.swift */; };
 		AA3F3FB72031645700920014 /* DoubleLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3F3FB52031645700920014 /* DoubleLabelTableViewCell.swift */; };
 		AA3F3FB9203164DB00920014 /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3F3FB8203164DB00920014 /* TextViewTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA1BAD7120327E40006C43FF /* CategoryPickerViewControllerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerViewControllerTableViewController.swift; sourceTree = "<group>"; };
+		AA1BAD73203298A6006C43FF /* HudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudView.swift; sourceTree = "<group>"; };
 		AA1D4A09202D64FD00E6221D /* MyLocations.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyLocations.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA1D4A0C202D64FD00E6221D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA1D4A0E202D64FD00E6221D /* CurrentLocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationController.swift; sourceTree = "<group>"; };
@@ -25,7 +29,7 @@
 		AA1D4A15202D64FD00E6221D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA1D4A1A202D64FD00E6221D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA1D4A20202D6AD600E6221D /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		AA3F3FB42031645700920014 /* IconTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconTableViewCell.swift; sourceTree = "<group>"; };
+		AA3F3FB42031645700920014 /* SelectViaViewTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectViaViewTableViewCell.swift; sourceTree = "<group>"; };
 		AA3F3FB52031645700920014 /* DoubleLabelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleLabelTableViewCell.swift; sourceTree = "<group>"; };
 		AA3F3FB8203164DB00920014 /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -62,13 +66,15 @@
 			children = (
 				AA3F3FB8203164DB00920014 /* TextViewTableViewCell.swift */,
 				AA3F3FB52031645700920014 /* DoubleLabelTableViewCell.swift */,
-				AA3F3FB42031645700920014 /* IconTableViewCell.swift */,
+				AA3F3FB42031645700920014 /* SelectViaViewTableViewCell.swift */,
 				AA1D4A0C202D64FD00E6221D /* AppDelegate.swift */,
 				AA1D4A0E202D64FD00E6221D /* CurrentLocationController.swift */,
 				AA1D4A10202D64FD00E6221D /* TagLocationViewController.swift */,
 				AA1D4A15202D64FD00E6221D /* Assets.xcassets */,
 				AA1D4A1A202D64FD00E6221D /* Info.plist */,
 				AA1D4A20202D6AD600E6221D /* Launch Screen.storyboard */,
+				AA1BAD7120327E40006C43FF /* CategoryPickerViewControllerTableViewController.swift */,
+				AA1BAD73203298A6006C43FF /* HudView.swift */,
 			);
 			path = MyLocations;
 			sourceTree = "<group>";
@@ -146,9 +152,11 @@
 			files = (
 				AA1D4A11202D64FD00E6221D /* TagLocationViewController.swift in Sources */,
 				AA1D4A0D202D64FD00E6221D /* AppDelegate.swift in Sources */,
+				AA1BAD7220327E40006C43FF /* CategoryPickerViewControllerTableViewController.swift in Sources */,
 				AA3F3FB72031645700920014 /* DoubleLabelTableViewCell.swift in Sources */,
+				AA1BAD74203298A6006C43FF /* HudView.swift in Sources */,
 				AA3F3FB9203164DB00920014 /* TextViewTableViewCell.swift in Sources */,
-				AA3F3FB62031645700920014 /* IconTableViewCell.swift in Sources */,
+				AA3F3FB62031645700920014 /* SelectViaViewTableViewCell.swift in Sources */,
 				AA1D4A0F202D64FD00E6221D /* CurrentLocationController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,6 +278,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FNW7L4X44S;
 				INFOPLIST_FILE = MyLocations/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Gridstone.Christian.Vassallo.MyLocations;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -285,6 +294,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FNW7L4X44S;
 				INFOPLIST_FILE = MyLocations/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Gridstone.Christian.Vassallo.MyLocations;
 				PRODUCT_NAME = "$(TARGET_NAME)";

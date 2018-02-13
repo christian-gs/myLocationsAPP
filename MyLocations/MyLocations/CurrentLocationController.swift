@@ -98,7 +98,7 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
     }
 
     @objc func openTagLocationViewController() {
-        let tagLocationController = UINavigationController(rootViewController: TagLocationViewController(style: .grouped))
+        let tagLocationController = UINavigationController(rootViewController: TagLocationViewController(location: self.location!, address: addressLabel.text!))
         present(tagLocationController, animated: true, completion: nil)
     }
 
