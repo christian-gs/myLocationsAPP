@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import CoreData
 
 class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
 
@@ -32,6 +33,8 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
     var lastGeocodingError: Error?
     // used to time out a location request if it taskes to long
     var timer: Timer?
+    //coreData
+    var managedObjectContext: NSManagedObjectContext!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,8 +101,10 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
     }
 
     @objc func openTagLocationViewController() {
-        let tagLocationController = UINavigationController(rootViewController: TagLocationViewController(location: self.location!, address: addressLabel.text!))
-        present(tagLocationController, animated: true, completion: nil)
+        let tagLocationViewController = TagLocationViewController(location: self.location!, address: addressLabel.text!)
+        tagLocationViewController.managedObjectContext = managedObjectContext // coreData
+        let tagLocationNavController = UINavigationController(rootViewController: tagLocationViewController )
+        present(tagLocationNavController, animated: true, completion: nil)
     }
 
     @objc func getLocation() {

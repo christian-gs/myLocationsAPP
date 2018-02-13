@@ -7,25 +7,41 @@
 //
 
 import UIKit
+import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    //core data variables
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "DataModel")
+        container.loadPersistentStores(completionHandler: {
+            storeDescription, error in
+            if let error = error {
+                fatalError("Could load data store: \(error)")
+            }
+        })
+        return container
+    }()
+    lazy var managedObjectContext: NSManagedObjectContext = self.persistentContainer.viewContext
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
+
         let window = UIWindow(frame: UIScreen.main.bounds)
         
         let tabController = UITabBarController()
         let currentLocationViewController = CurrentLocationController()
         currentLocationViewController.tabBarItem = UITabBarItem(title: "Location", image: #imageLiteral(resourceName: "first") , selectedImage: #imageLiteral(resourceName: "first") )
+        currentLocationViewController.managedObjectContext = self.managedObjectContext //coreData
         tabController.viewControllers = [currentLocationViewController]
         
         window.rootViewController = tabController
         window.makeKeyAndVisible()
-        
         self.window = window // cursed code
+
+        //print coreData file path
+        print("\n\n\n \(applicationDocumentsDirectory) \n\n\n")
         
         return true
     }

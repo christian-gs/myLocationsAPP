@@ -1,23 +1,25 @@
-//
-//  SecondViewController.swift
-//  MyLocations
-//
-//  Created by Christian on 2/9/18.
-//  Copyright © 2018 Gridstone. All rights reserved.
-//
 
 import UIKit
 import CoreLocation
+import CoreData
 
 class TagLocationViewController: UITableViewController, CategoryPickerViewControllerDelegate {
 
     private var location : CLLocation
+    private var descriptionText = " "
+    private var category = "No Category"
+    private var latitude: Double
+    private var longitude: Double
+    private var date = Date()
     private var address: String
 
-    private var selectedCategory = "No Category"
+    //core data
+    var managedObjectContext: NSManagedObjectContext!
 
     init(location: CLLocation, address: String) {
         self.location = location
+        self.latitude = location.coordinate.latitude
+        self.longitude = location.coordinate.longitude
         self.address = address
         super.init(style: .grouped)
     }
@@ -50,15 +52,31 @@ class TagLocationViewController: UITableViewController, CategoryPickerViewContro
     }
 
     @objc func doneTapped() {
+        //play animation
         let hudView = HudView.hud(inView: navigationController!.view, animated: true)
         hudView.text = "Tagged"
 
-        let delayInSeconds = 0.5
-        DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds,
+        //coreData object
+        let location = Location(context: managedObjectContext)
+        location.locationDescription = self.descriptionText
+        location.category = self.category
+        location.latitude = self.latitude
+        location.longitude = self.longitude
+        location.date = self.date
+        location.address = self.address
+        do {
+            // save coreData
+            try managedObjectContext.save()
+            //delay view dismiss so animation has time to play
+            let delayInSeconds = 0.5
+            DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds,
             execute: {
                 hudView.hide()
                 self.dismiss(animated: true, completion: nil)
-        })
+            })
+        } catch {
+            fatalError("Error: \(error)")
+        }
     }
 
     @objc func cancelTapped() {
@@ -99,13 +117,13 @@ class TagLocationViewController: UITableViewController, CategoryPickerViewContro
                 cell.textView.becomeFirstResponder()
             }
             else if indexPath.row == 1 {
-                let categoryPickerViewController = CategoryPickerViewController(category: self.selectedCategory)
+                let categoryPickerViewController = CategoryPickerViewController(category: self.category)
                 categoryPickerViewController.delegate = self
                 navigationController?.pushViewController(categoryPickerViewController, animated: true)
             }
         }
         else if indexPath.section == 1 {
-            let categoryPickerViewController = CategoryPickerViewController(category: self.selectedCategory)
+            let categoryPickerViewController = CategoryPickerViewController(category: self.category)
             categoryPickerViewController.delegate = self
             navigationController?.pushViewController(categoryPickerViewController, animated: true)
         }
@@ -154,7 +172,7 @@ class TagLocationViewController: UITableViewController, CategoryPickerViewContro
         switch indexPath.section {
         case 0:
             cell.mainLabel.text = "Category"
-            cell.selectedLabel.text = selectedCategory
+            cell.selectedLabel.text = category
         case 1:
             cell.mainLabel.text = "Add Photo"
         default:
@@ -168,10 +186,10 @@ class TagLocationViewController: UITableViewController, CategoryPickerViewContro
         switch indexPath.row {
         case 0:
             cell.leftLabel.text = "Latitude"
-            cell.rightLabel.text = String(format: "%.8f", self.location.coordinate.latitude)
+            cell.rightLabel.text = String(format: "%.8f", self.latitude)
         case 1:
             cell.leftLabel.text = "Longitude"
-            cell.rightLabel.text = String(format: "%.8f",self.location.coordinate.longitude)
+            cell.rightLabel.text = String(format: "%.8f",self.longitude)
         case 2:
             cell.leftLabel.text = "Address"
             cell.rightLabel.numberOfLines = 0
@@ -181,7 +199,7 @@ class TagLocationViewController: UITableViewController, CategoryPickerViewContro
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
             formatter.timeStyle = .short
-            cell.rightLabel.text = formatter.string(from: Date())
+            cell.rightLabel.text = formatter.string(from: self.date)
         default:
             break
         }
@@ -191,7 +209,7 @@ class TagLocationViewController: UITableViewController, CategoryPickerViewContro
 
     //MARK:- CategoryPickerViewControllerDelegate Methods
     func backTapped(_ categoryViewController: CategoryPickerViewController, selectedCategory: String) {
-        self.selectedCategory = selectedCategory
+        self.category = selectedCategory
         tableView.reloadData()
         navigationController?.popViewController(animated: true)
     }
