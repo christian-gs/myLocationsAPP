@@ -3,24 +3,34 @@ import UIKit
 import CoreLocation
 import CoreData
 
-class TagLocationViewController: UITableViewController, CategoryPickerViewControllerDelegate {
+class LocationDetailsViewController: UITableViewController, CategoryPickerViewControllerDelegate, UITextViewDelegate, UITextFieldDelegate {
 
-    private var location : CLLocation
     private var descriptionText = " "
     private var category = "No Category"
     private var latitude: Double
     private var longitude: Double
     private var date = Date()
     private var address: String
+    private var locationToEdit: Location? 
 
     //core data
     var managedObjectContext: NSManagedObjectContext!
 
     init(location: CLLocation, address: String) {
-        self.location = location
         self.latitude = location.coordinate.latitude
         self.longitude = location.coordinate.longitude
         self.address = address
+        super.init(style: .grouped)
+    }
+
+    init(locationToEdit: Location) {
+        self.locationToEdit = locationToEdit
+        self.descriptionText = locationToEdit.locationDescription
+        self.category = locationToEdit.category
+        self.date = locationToEdit.date!
+        self.latitude = locationToEdit.latitude
+        self.longitude = locationToEdit.longitude
+        self.address = locationToEdit.address
         super.init(style: .grouped)
     }
 
@@ -31,7 +41,6 @@ class TagLocationViewController: UITableViewController, CategoryPickerViewContro
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Tag Location"
         navigationController?.navigationBar.tintColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelTapped))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
@@ -51,14 +60,29 @@ class TagLocationViewController: UITableViewController, CategoryPickerViewContro
         tableView.addGestureRecognizer(gestureRecognizer)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        if locationToEdit == nil {
+            title = "Add Location"
+        } else {
+            title = "Edit Location"
+        }
+    }
+
     @objc func doneTapped() {
         //play animation
         let hudView = HudView.hud(inView: navigationController!.view, animated: true)
-        hudView.text = "Tagged"
+        let location: Location
+
+        if locationToEdit == nil {
+            hudView.text = "Tagged"
+            location = Location(context: managedObjectContext)
+        } else {
+            hudView.text = "Updated"
+            location = locationToEdit!
+        }
 
         //coreData object
-        let location = Location(context: managedObjectContext)
-        location.locationDescription = self.descriptionText
+        location.locationDescription = self.descriptionText.trimmingCharacters(in: .whitespacesAndNewlines)
         location.category = self.category
         location.latitude = self.latitude
         location.longitude = self.longitude
@@ -72,15 +96,15 @@ class TagLocationViewController: UITableViewController, CategoryPickerViewContro
             DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds,
             execute: {
                 hudView.hide()
-                self.dismiss(animated: true, completion: nil)
+                self.navigationController?.popViewController(animated: true)
             })
         } catch {
-            fatalError("Error: \(error)")
+            fatalCoreDataError(error)
         }
     }
 
     @objc func cancelTapped() {
-        dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
 
     //function to hide keyboard when user clicks off textView cell
@@ -150,7 +174,7 @@ class TagLocationViewController: UITableViewController, CategoryPickerViewContro
         switch section {
         case 0:
             if row == 0 {
-                cell = tableView.dequeueReusableCell(withIdentifier: "textViewCell", for: indexPath)
+                cell = configureTextViewViewCell(indexPath: indexPath)
             }
             else if row == 1 {
                 cell = configureSelectViaViewCell(indexPath: indexPath)
@@ -165,6 +189,15 @@ class TagLocationViewController: UITableViewController, CategoryPickerViewContro
 
         return cell!
 
+    }
+
+    func configureTextViewViewCell(indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "textViewCell", for: indexPath) as! TextViewTableViewCell
+        cell.textView.delegate = self
+        if locationToEdit != nil {
+            cell.textView.text = self.descriptionText
+        }
+        return cell
     }
 
     func configureSelectViaViewCell(indexPath: IndexPath) -> UITableViewCell {
@@ -213,5 +246,11 @@ class TagLocationViewController: UITableViewController, CategoryPickerViewContro
         tableView.reloadData()
         navigationController?.popViewController(animated: true)
     }
+
+    //MARK:- TextViewDelegate Methods
+    func textViewDidChange(_ textView: UITextView) {
+        self.descriptionText = textView.text
+    }
+
 
 }

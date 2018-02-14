@@ -13,9 +13,11 @@
 		AA1BAD7C2032B304006C43FF /* Location+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1BAD7A2032B304006C43FF /* Location+CoreDataClass.swift */; };
 		AA1BAD7D2032B304006C43FF /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1BAD7B2032B304006C43FF /* Location+CoreDataProperties.swift */; };
 		AA1BAD7F2032B8A2006C43FF /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1BAD7E2032B8A2006C43FF /* Functions.swift */; };
+		AA1C22EE2033A8A60068A79D /* LocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1C22ED2033A8A60068A79D /* LocationsViewController.swift */; };
+		AA1C22F32033B9080068A79D /* SubTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1C22F22033B9080068A79D /* SubTitleTableViewCell.swift */; };
 		AA1D4A0D202D64FD00E6221D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D4A0C202D64FD00E6221D /* AppDelegate.swift */; };
 		AA1D4A0F202D64FD00E6221D /* CurrentLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D4A0E202D64FD00E6221D /* CurrentLocationController.swift */; };
-		AA1D4A11202D64FD00E6221D /* TagLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D4A10202D64FD00E6221D /* TagLocationViewController.swift */; };
+		AA1D4A11202D64FD00E6221D /* LocationDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D4A10202D64FD00E6221D /* LocationDetailsViewController.swift */; };
 		AA1D4A16202D64FD00E6221D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA1D4A15202D64FD00E6221D /* Assets.xcassets */; };
 		AA1D4A21202D6AD600E6221D /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA1D4A20202D6AD600E6221D /* Launch Screen.storyboard */; };
 		AA3F3FB62031645700920014 /* SelectViaViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3F3FB42031645700920014 /* SelectViaViewTableViewCell.swift */; };
@@ -30,10 +32,12 @@
 		AA1BAD7A2032B304006C43FF /* Location+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AA1BAD7B2032B304006C43FF /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AA1BAD7E2032B8A2006C43FF /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
+		AA1C22ED2033A8A60068A79D /* LocationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsViewController.swift; sourceTree = "<group>"; };
+		AA1C22F22033B9080068A79D /* SubTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubTitleTableViewCell.swift; sourceTree = "<group>"; };
 		AA1D4A09202D64FD00E6221D /* MyLocations.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyLocations.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA1D4A0C202D64FD00E6221D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA1D4A0E202D64FD00E6221D /* CurrentLocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationController.swift; sourceTree = "<group>"; };
-		AA1D4A10202D64FD00E6221D /* TagLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagLocationViewController.swift; sourceTree = "<group>"; };
+		AA1D4A10202D64FD00E6221D /* LocationDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailsViewController.swift; sourceTree = "<group>"; };
 		AA1D4A15202D64FD00E6221D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA1D4A1A202D64FD00E6221D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA1D4A20202D6AD600E6221D /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -53,6 +57,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA1C22EF2033B8540068A79D /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				AA1BAD7120327E40006C43FF /* CategoryPickerViewControllerTableViewController.swift */,
+				AA1D4A0E202D64FD00E6221D /* CurrentLocationController.swift */,
+				AA1C22ED2033A8A60068A79D /* LocationsViewController.swift */,
+				AA1D4A10202D64FD00E6221D /* LocationDetailsViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		AA1C22F02033B8910068A79D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA1C22F12033B8B50068A79D /* Custom Cells */,
+				AA1BAD73203298A6006C43FF /* HudView.swift */,
+				AA1D4A20202D6AD600E6221D /* Launch Screen.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AA1C22F12033B8B50068A79D /* Custom Cells */ = {
+			isa = PBXGroup;
+			children = (
+				AA3F3FB52031645700920014 /* DoubleLabelTableViewCell.swift */,
+				AA3F3FB42031645700920014 /* SelectViaViewTableViewCell.swift */,
+				AA3F3FB8203164DB00920014 /* TextViewTableViewCell.swift */,
+				AA1C22F22033B9080068A79D /* SubTitleTableViewCell.swift */,
+			);
+			path = "Custom Cells";
+			sourceTree = "<group>";
+		};
 		AA1D4A00202D64FD00E6221D = {
 			isa = PBXGroup;
 			children = (
@@ -75,18 +111,12 @@
 			isa = PBXGroup;
 			children = (
 				AA1D4A0C202D64FD00E6221D /* AppDelegate.swift */,
-				AA1D4A15202D64FD00E6221D /* Assets.xcassets */,
-				AA1BAD7120327E40006C43FF /* CategoryPickerViewControllerTableViewController.swift */,
-				AA1D4A0E202D64FD00E6221D /* CurrentLocationController.swift */,
-				AA3F3FB52031645700920014 /* DoubleLabelTableViewCell.swift */,
-				AA1BAD73203298A6006C43FF /* HudView.swift */,
-				AA1D4A1A202D64FD00E6221D /* Info.plist */,
-				AA1D4A20202D6AD600E6221D /* Launch Screen.storyboard */,
-				AA3F3FB42031645700920014 /* SelectViaViewTableViewCell.swift */,
-				AA1D4A10202D64FD00E6221D /* TagLocationViewController.swift */,
-				AA3F3FB8203164DB00920014 /* TextViewTableViewCell.swift */,
 				AA1BAD772032B119006C43FF /* DataModel.xcdatamodeld */,
+				AA1D4A15202D64FD00E6221D /* Assets.xcassets */,
+				AA1D4A1A202D64FD00E6221D /* Info.plist */,
 				AA1BAD7E2032B8A2006C43FF /* Functions.swift */,
+				AA1C22EF2033B8540068A79D /* Controllers */,
+				AA1C22F02033B8910068A79D /* Views */,
 			);
 			path = MyLocations;
 			sourceTree = "<group>";
@@ -162,14 +192,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA1D4A11202D64FD00E6221D /* TagLocationViewController.swift in Sources */,
+				AA1D4A11202D64FD00E6221D /* LocationDetailsViewController.swift in Sources */,
 				AA1D4A0D202D64FD00E6221D /* AppDelegate.swift in Sources */,
 				AA1BAD7D2032B304006C43FF /* Location+CoreDataProperties.swift in Sources */,
+				AA1C22F32033B9080068A79D /* SubTitleTableViewCell.swift in Sources */,
 				AA1BAD7220327E40006C43FF /* CategoryPickerViewControllerTableViewController.swift in Sources */,
 				AA3F3FB72031645700920014 /* DoubleLabelTableViewCell.swift in Sources */,
 				AA1BAD74203298A6006C43FF /* HudView.swift in Sources */,
 				AA1BAD792032B119006C43FF /* DataModel.xcdatamodeld in Sources */,
 				AA3F3FB9203164DB00920014 /* TextViewTableViewCell.swift in Sources */,
+				AA1C22EE2033A8A60068A79D /* LocationsViewController.swift in Sources */,
 				AA3F3FB62031645700920014 /* SelectViaViewTableViewCell.swift in Sources */,
 				AA1BAD7C2032B304006C43FF /* Location+CoreDataClass.swift in Sources */,
 				AA1D4A0F202D64FD00E6221D /* CurrentLocationController.swift in Sources */,

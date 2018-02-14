@@ -31,10 +31,12 @@ class HudView: UIView {
         roundedRect.fill()
 
         // Draw checkmark
-        if let image = UIImage(named: "Checkmark") {
-            let imagePoint = CGPoint( x: center.x - round(image.size.width / 2), y: center.y - round(image.size.height / 2) - boxHeight / 8)
-            image.draw(at: imagePoint)
-        }
+        let image = #imageLiteral(resourceName: "Checkmark").withRenderingMode(.alwaysTemplate)
+        let imagePoint = CGPoint(x: center.x - round(image.size.width / 2), y: center.y - round(image.size.height / 2) - boxHeight / 8)
+        let imageView = UIImageView(frame: CGRect(x: imagePoint.x, y: imagePoint.y, width: image.size.width, height: image.size.height))
+        imageView.image = image
+        imageView.tintColor = UIColor.white
+        addSubview(imageView)
 
         // Draw the text
         let attribs = [

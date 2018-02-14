@@ -39,7 +39,7 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        edgesForExtendedLayout = []
+        title = "Current Location"
 
         messageLabel.text = "Tap 'Get My Location' to Start"
         messageLabel.textAlignment = .center
@@ -57,7 +57,7 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
         tagButton.setTitle("Tag Location", for: .normal)
         tagButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         tagButton.isHidden = true
-        tagButton.addTarget(self, action: #selector(openTagLocationViewController), for: .touchUpInside)
+        tagButton.addTarget(self, action: #selector(openLocationDetailsViewController), for: .touchUpInside)
         getButton.setTitle("Get My Location", for: .normal)
         getButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         getButton.addTarget(self, action: #selector(getLocation), for: .touchUpInside)
@@ -69,7 +69,7 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
         }
 
         NSLayoutConstraint.activate([
-            messageLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
+            messageLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
             messageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             messageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
@@ -96,15 +96,14 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
             tagButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
             getButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            getButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30)
+            getButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
         ])
     }
 
-    @objc func openTagLocationViewController() {
-        let tagLocationViewController = TagLocationViewController(location: self.location!, address: addressLabel.text!)
-        tagLocationViewController.managedObjectContext = managedObjectContext // coreData
-        let tagLocationNavController = UINavigationController(rootViewController: tagLocationViewController )
-        present(tagLocationNavController, animated: true, completion: nil)
+    @objc func openLocationDetailsViewController() {
+        let locationDetailsViewController = LocationDetailsViewController(location: self.location!, address: addressLabel.text!)
+        locationDetailsViewController.managedObjectContext = managedObjectContext // coreData
+        navigationController?.pushViewController(locationDetailsViewController, animated: true)
     }
 
     @objc func getLocation() {
