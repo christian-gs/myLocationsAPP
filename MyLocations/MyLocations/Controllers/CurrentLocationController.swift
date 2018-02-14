@@ -41,7 +41,7 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         title = "Current Location"
 
-        messageLabel.text = "Tap 'Get My Location' to Start"
+        messageLabel.text = "(Tap 'Get My Location' to Start)"
         messageLabel.textAlignment = .center
         latitudeTextLabel.text = "Latitude: "
         latitudeTextLabel.textAlignment = .left
@@ -51,7 +51,7 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
         longitudeTextLabel.textAlignment = .left
         longitudeValueLabel.text = ""
         longitudeValueLabel.textAlignment = .right
-        addressLabel.text = "Address goes here"
+        addressLabel.text = "(Address goes here)"
         addressLabel.textAlignment = .left
         addressLabel.numberOfLines = 0
         tagButton.setTitle("Tag Location", for: .normal)

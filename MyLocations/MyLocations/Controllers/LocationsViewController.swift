@@ -22,7 +22,7 @@ class LocationsViewController: UITableViewController {
             let sort2 = NSSortDescriptor(key: "date", ascending: true)
             fetchRequest.sortDescriptors = [sort1, sort2]
             fetchRequest.fetchBatchSize = 20
-            let fetchedResultsController = NSFetchedResultsController( fetchRequest: fetchRequest,
+            let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                 managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "category", cacheName: "Locations")
             fetchedResultsController.delegate = self
             return fetchedResultsController
@@ -118,6 +118,16 @@ class LocationsViewController: UITableViewController {
         cell?.detailTextLabel?.text = currentLocation.address
         return cell!
     }
+
+    func configureLocationCell(cell: SubTitleTableViewCell, indexPath: IndexPath) {
+        let currentLocation = fetchedResultsController.object(at: indexPath)
+
+        //remove white space from location description string
+        let trimmedDescription = currentLocation.locationDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+        cell.textLabel?.text = trimmedDescription == "" ? "(No Description)" : currentLocation.locationDescription
+
+        cell.detailTextLabel?.text = currentLocation.address
+    }
 }
 
 // MARK:- NSFetchedResultsController Delegate Extension
@@ -140,8 +150,8 @@ NSFetchedResultsControllerDelegate {
                 tableView.deleteRows(at: [indexPath!], with: .fade)
             case .update:
                 print("*** NSFetchedResultsChangeUpdate (object)")
-                if var cell = tableView.cellForRow(at: indexPath!) {
-                    cell = configureLocationCell(indexPath: indexPath!)
+                if let cell = tableView.cellForRow(at: indexPath!) as! SubTitleTableViewCell?  {
+                    configureLocationCell(cell: cell, indexPath: indexPath!)
                 }
             case .move:
                 print("*** NSFetchedResultsChangeMove (object)")

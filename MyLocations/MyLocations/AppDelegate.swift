@@ -40,7 +40,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         locationsViewController.tabBarItem = UITabBarItem(title: "Saved Locations", image: #imageLiteral(resourceName: "second"), selectedImage: #imageLiteral(resourceName: "second") )
         locationsViewController.managedObjectContext = self.managedObjectContext
         let locationsNavController = UINavigationController(rootViewController: locationsViewController)
-        tabController.viewControllers = [currentLocationNavController, locationsNavController]
+
+        let mapViewController = MapViewController()
+        mapViewController.tabBarItem = UITabBarItem(title: "Map", image: #imageLiteral(resourceName: "first"), selectedImage: #imageLiteral(resourceName: "first") )
+        mapViewController.managedObjectContext = self.managedObjectContext
+        let mapNavController = UINavigationController(rootViewController: mapViewController)
+        tabController.viewControllers = [currentLocationNavController, locationsNavController, mapNavController]
         
         window.rootViewController = tabController
         window.makeKeyAndVisible()
