@@ -17,11 +17,13 @@ class LocationsViewController: UITableViewController {
             let fetchRequest = NSFetchRequest<Location>()
             let entity = Location.entity()
             fetchRequest.entity = entity
-            let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
-            fetchRequest.sortDescriptors = [sortDescriptor]
+            // sort locations by category and date
+            let sort1 = NSSortDescriptor(key: "category", ascending: true)
+            let sort2 = NSSortDescriptor(key: "date", ascending: true)
+            fetchRequest.sortDescriptors = [sort1, sort2]
             fetchRequest.fetchBatchSize = 20
             let fetchedResultsController = NSFetchedResultsController( fetchRequest: fetchRequest,
-                managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: "Locations")
+                managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "category", cacheName: "Locations")
             fetchedResultsController.delegate = self
             return fetchedResultsController
     }()
@@ -35,11 +37,13 @@ class LocationsViewController: UITableViewController {
         super.viewDidLoad()
 
         title = "Saved Locations"
+        navigationItem.rightBarButtonItem = editButtonItem
         performFetch()
 
         tableView.delegate = self
         tableView.dataSource = self
         tableView.estimatedRowHeight = 60
+        tableView.tableFooterView = UIView()
         tableView.register(SubTitleTableViewCell.self, forCellReuseIdentifier: "subTitleCell")
     }
 
@@ -70,18 +74,32 @@ class LocationsViewController: UITableViewController {
         return sectionInfo.numberOfObjects
     }
 
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return categories[section]
-//    }
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return fetchedResultsController.sections!.count
+    }
 
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1
-//    }
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let sectionInfo = fetchedResultsController.sections![section]
+        return sectionInfo.name
+    }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let locationsViewController = LocationDetailsViewController(locationToEdit: fetchedResultsController.object(at: indexPath))
         locationsViewController.managedObjectContext = self.managedObjectContext
         navigationController?.pushViewController(locationsViewController, animated: true)
+    }
+
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let location = fetchedResultsController.object(at: indexPath)
+            managedObjectContext.delete(location)
+            do {
+                try managedObjectContext.save()
+            } catch {
+                fatalCoreDataError(error)
+            }
+        }
+
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
