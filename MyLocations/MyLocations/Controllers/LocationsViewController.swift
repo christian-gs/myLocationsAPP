@@ -44,7 +44,13 @@ class LocationsViewController: UITableViewController {
         tableView.dataSource = self
         tableView.estimatedRowHeight = 60
         tableView.tableFooterView = UIView()
-        tableView.register(SubTitleTableViewCell.self, forCellReuseIdentifier: "subTitleCell")
+        tableView.register(LocationsTableViewCell.self, forCellReuseIdentifier: "locationsCell")
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        tableView.reloadData()
     }
 
     func loadCoreData() {
@@ -92,6 +98,7 @@ class LocationsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let location = fetchedResultsController.object(at: indexPath)
+            location.removePhotoFile()
             managedObjectContext.delete(location)
             do {
                 try managedObjectContext.save()
@@ -102,31 +109,41 @@ class LocationsViewController: UITableViewController {
 
     }
 
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 66
+    }
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.configureLocationCell(indexPath: indexPath)
         return cell
     }
 
     func configureLocationCell(indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "subTitleCell") as? SubTitleTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "locationsCell") as? LocationsTableViewCell
         let currentLocation = fetchedResultsController.object(at: indexPath)
 
         //remove white space from location description string
         let trimmedDescription = currentLocation.locationDescription.trimmingCharacters(in: .whitespacesAndNewlines)
-        cell?.textLabel?.text = trimmedDescription == "" ? "(No Description)" : currentLocation.locationDescription
+        cell?.mainLabel.text = trimmedDescription == "" ? "(No Description)" : currentLocation.locationDescription
 
-        cell?.detailTextLabel?.text = currentLocation.address
+        cell?.subLabel.text = currentLocation.address
+        if currentLocation.hasPhoto {
+            cell?.locationImageView.image = currentLocation.photoImage
+        }
         return cell!
     }
 
-    func configureLocationCell(cell: SubTitleTableViewCell, indexPath: IndexPath) {
+    func configureLocationCell(cell: LocationsTableViewCell, indexPath: IndexPath) {
         let currentLocation = fetchedResultsController.object(at: indexPath)
 
         //remove white space from location description string
         let trimmedDescription = currentLocation.locationDescription.trimmingCharacters(in: .whitespacesAndNewlines)
-        cell.textLabel?.text = trimmedDescription == "" ? "(No Description)" : currentLocation.locationDescription
+        cell.mainLabel.text = trimmedDescription == "" ? "(No Description)" : currentLocation.locationDescription
 
-        cell.detailTextLabel?.text = currentLocation.address
+        cell.subLabel.text = currentLocation.address
+        if currentLocation.hasPhoto {
+            cell.locationImageView.image = currentLocation.photoImage
+        }
     }
 }
 
@@ -150,7 +167,7 @@ NSFetchedResultsControllerDelegate {
                 tableView.deleteRows(at: [indexPath!], with: .fade)
             case .update:
                 print("*** NSFetchedResultsChangeUpdate (object)")
-                if let cell = tableView.cellForRow(at: indexPath!) as! SubTitleTableViewCell?  {
+                if let cell = tableView.cellForRow(at: indexPath!) as! LocationsTableViewCell?  {
                     configureLocationCell(cell: cell, indexPath: indexPath!)
                 }
             case .move:

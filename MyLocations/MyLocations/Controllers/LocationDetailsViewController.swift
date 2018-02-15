@@ -11,7 +11,16 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
     private var longitude: Double
     private var date = Date()
     private var address: String
-    private var locationToEdit: Location? 
+    private var locationToEdit: Location?
+    private var image: UIImage? {
+        didSet {
+            let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! SelectViaViewTableViewCell
+            cell.show(image: image!)
+            tableView.reloadData()
+        }
+    }
+
+    private var observer: Any?
 
     //core data
     var managedObjectContext: NSManagedObjectContext!
@@ -32,6 +41,13 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
         self.longitude = locationToEdit.longitude
         self.address = locationToEdit.address
         super.init(style: .grouped)
+    }
+
+    deinit {
+        print("*** deinit \(self)")
+        if observer != nil {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -65,6 +81,11 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
             title = "Add Location"
         } else {
             title = "Edit Location"
+            if image == nil, locationToEdit!.hasPhoto {
+                if let theImage = locationToEdit!.photoImage {
+                    self.image = theImage
+                }
+            }
         }
     }
 
@@ -88,6 +109,21 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
         location.longitude = self.longitude
         location.date = self.date
         location.address = self.address
+        location.photoID = nil
+        // Save image
+        if let image = image {
+            if !location.hasPhoto {
+                location.photoID = Location.nextPhotoID() as NSNumber
+            }
+            if let data = UIImageJPEGRepresentation(image, 0.5) {
+                do {
+                    try data.write(to: location.photoURL, options: .atomic)
+                } catch {
+                    print("Error writing file: \(error)")
+                }
+            }
+        }
+        
         do {
             // save coreData
             try managedObjectContext.save()
@@ -113,9 +149,14 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
         let indexPath = tableView.indexPathForRow(at: point)
         guard indexPath == nil || indexPath!.section != 0 || indexPath!.row != 0 else { return }
 
+        resignTextViewResponse()
+    }
+
+    func resignTextViewResponse() {
         let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0) ) as! TextViewTableViewCell
         cell.textView.resignFirstResponder()
     }
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
@@ -133,24 +174,35 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
         return 0
     }
 
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch (indexPath.section, indexPath.row) {
+        case  (0, 0) :
+            return 88
+        case  (1, 0) :
+            return image == nil ? 44 : 280
+        default:
+            return 44
+        }
+        return 44
+    }
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        if indexPath.section == 0 {
-            if indexPath.row == 0 {
-                let cell = tableView.cellForRow(at: indexPath) as! TextViewTableViewCell
-                cell.textView.becomeFirstResponder()
-            }
-            else if indexPath.row == 1 {
-                let categoryPickerViewController = CategoryPickerViewController(category: self.category)
-                categoryPickerViewController.delegate = self
-                navigationController?.pushViewController(categoryPickerViewController, animated: true)
-            }
-        }
-        else if indexPath.section == 1 {
+
+        switch (indexPath.section, indexPath.row) {
+        case  (0, 0) :
+            let cell = tableView.cellForRow(at: indexPath) as! TextViewTableViewCell
+            cell.textView.becomeFirstResponder()
+        case  (0, 1) :
             let categoryPickerViewController = CategoryPickerViewController(category: self.category)
             categoryPickerViewController.delegate = self
             navigationController?.pushViewController(categoryPickerViewController, animated: true)
+        case (1, 0) :
+            self.pickPhoto()
+        default:
+            break
         }
+
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -252,5 +304,76 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
         self.descriptionText = textView.text
     }
 
+    //MARK:- App State Listeners
+    func listenForBackgroundNotification() {
+        observer = NotificationCenter.default.addObserver(forName: Notification.Name.UIApplicationDidEnterBackground,
+        object: nil, queue: OperationQueue.main) { [weak self]_ in
+
+            if let weakSelf = self {
+                if weakSelf.presentedViewController != nil {
+                    weakSelf.dismiss(animated: false, completion: nil)
+                }
+                weakSelf.resignTextViewResponse()
+            }
+        }
+    }
+}
+
+extension LocationDetailsViewController:
+    UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func takePhotoWithCamera() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .camera
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true, completion: nil)
+    }
+
+    func choosePhotoFromLibrary() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true, completion: nil)
+    }
+
+    func pickPhoto() {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            showPhotoMenu()
+        } else {
+            choosePhotoFromLibrary()
+        }
+    }
+
+    func showPhotoMenu() {
+
+        let alert: UIAlertController
+
+        if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad ){
+            alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        } else {
+            alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        }
+        let actCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(actCancel)
+        let actPhoto = UIAlertAction(title: "Take Photo", style: .default, handler: { _ in
+            self.takePhotoWithCamera() })
+        alert.addAction(actPhoto)
+        let actLibrary = UIAlertAction(title: "Choose From Library", style: .default, handler: { _ in
+            self.choosePhotoFromLibrary() })
+        alert.addAction(actLibrary)
+
+        present(alert, animated: true, completion: nil)
+
+    }
+
+    // MARK:- Image Picker Delegates
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        image = info[UIImagePickerControllerEditedImage] as? UIImage
+        dismiss(animated: true, completion: nil)
+    }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
 
 }

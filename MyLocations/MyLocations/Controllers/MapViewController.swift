@@ -106,8 +106,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate{
         mapView.addAnnotations(locations)
     }
 
-    func region(for annotations: [MKAnnotation]) ->
-        MKCoordinateRegion {
+    func region(for annotations: [MKAnnotation]) -> MKCoordinateRegion {
             let region: MKCoordinateRegion
             switch annotations.count {
             case 0:
@@ -189,6 +188,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate{
     }
 
     @objc func showLocationDetails(_ sender: UIButton) {
+        //retrive previously stored location index from buttons tag
+        let index = Int(sender.tag)
+        let locationDetailsViewController = LocationDetailsViewController(locationToEdit: locations[index])
+        locationDetailsViewController.managedObjectContext = self.managedObjectContext
+        navigationController?.pushViewController(locationDetailsViewController, animated: true)
     }
 
 }
@@ -196,30 +200,30 @@ class MapViewController: UIViewController, CLLocationManagerDelegate{
 extension MapViewController: MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) ->  MKAnnotationView? {
-        // 1
+        // return immediatly if pin is not of type Location
         guard annotation is Location else {
             return nil
         }
-        // 2
+
         let identifier = "Location"
         var annotationView = mapView.dequeueReusableAnnotationView( withIdentifier: identifier)
         if annotationView == nil {
             let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
 
-            // 3
+            // customise pin
             pinView.isEnabled = true
             pinView.canShowCallout = true
             pinView.animatesDrop = false
             pinView.pinTintColor = UIColor(red: 0.32, green: 0.82, blue: 0.4, alpha: 1)
-            // 4
+            // add button to bin
             let rightButton = UIButton(type: .detailDisclosure)
             rightButton.addTarget(self, action: #selector(showLocationDetails), for: .touchUpInside)
             pinView.rightCalloutAccessoryView = rightButton
             annotationView = pinView
         }
+        // add location index to the buttons tag, so we can retrive location index when button pushed (showLocationDetails method)
         if let annotationView = annotationView {
             annotationView.annotation = annotation
-            // 5
             let button = annotationView.rightCalloutAccessoryView as! UIButton
             if let index = locations.index(of: annotation as! Location) {
                 button.tag = index
