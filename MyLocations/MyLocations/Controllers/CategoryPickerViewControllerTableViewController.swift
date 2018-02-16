@@ -41,6 +41,8 @@ class CategoryPickerViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
@@ -58,7 +60,10 @@ class CategoryPickerViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let category = categories[indexPath.row]
-
+        cell.contentView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        cell.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        cell.textLabel?.textColor = #colorLiteral(red: 0.4812185764, green: 0.4813033938, blue: 0.4812074304, alpha: 1)
+        cell.tintColor = #colorLiteral(red: 1, green: 0.7658156157, blue: 0, alpha: 1)
         cell.textLabel?.text = category
         cell.accessoryType = category == selectedCategoryName ? .checkmark : .none
 

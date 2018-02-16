@@ -37,6 +37,7 @@ class LocationsViewController: UITableViewController {
         super.viewDidLoad()
 
         title = "Saved Locations"
+        view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         navigationItem.rightBarButtonItem = editButtonItem
         performFetch()
 
@@ -44,6 +45,7 @@ class LocationsViewController: UITableViewController {
         tableView.dataSource = self
         tableView.estimatedRowHeight = 66
         tableView.tableFooterView = UIView()
+        tableView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         tableView.register(LocationsTableViewCell.self, forCellReuseIdentifier: "locationsCell")
     }
 
@@ -84,12 +86,26 @@ class LocationsViewController: UITableViewController {
         return fetchedResultsController.sections!.count
     }
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let sectionInfo = fetchedResultsController.sections![section]
-        return sectionInfo.name
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
+    }
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        let label = UILabel()
+
+        label.frame = CGRect(x: 10, y: 0, width: view.bounds.width, height: 30)
+        label.text = fetchedResultsController.sections![section].name
+        label.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+
+        headerView.addSubview(label)
+        headerView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        return headerView
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         let locationsViewController = LocationDetailsViewController(locationToEdit: fetchedResultsController.object(at: indexPath))
         locationsViewController.managedObjectContext = self.managedObjectContext
         navigationController?.pushViewController(locationsViewController, animated: true)
@@ -105,6 +121,7 @@ class LocationsViewController: UITableViewController {
             } catch {
                 fatalCoreDataError(error)
             }
+            tableView.reloadData()
         }
 
     }

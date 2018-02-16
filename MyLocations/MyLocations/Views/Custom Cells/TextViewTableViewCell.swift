@@ -17,6 +17,8 @@ class TextViewTableViewCell : UITableViewCell
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         // initialise cutom cells
+        textView.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        textView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         self.textView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(self.textView)
 
@@ -27,6 +29,8 @@ class TextViewTableViewCell : UITableViewCell
             textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             textView.heightAnchor.constraint(equalToConstant: 60)
         ])
+
+        contentView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
     
     required init?(coder aDecoder: NSCoder) {

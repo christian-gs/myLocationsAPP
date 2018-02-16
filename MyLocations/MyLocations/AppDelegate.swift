@@ -46,7 +46,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         mapViewController.managedObjectContext = self.managedObjectContext
         let mapNavController = UINavigationController(rootViewController: mapViewController)
         tabController.viewControllers = [currentLocationNavController, locationsNavController, mapNavController]
-        
+
+        UIButton.appearance().setTitleColor(#colorLiteral(red: 1, green: 0.7658156157, blue: 0, alpha: 1), for: .normal)
+        UITabBar.appearance().tintColor = #colorLiteral(red: 1, green: 0.7658156157, blue: 0, alpha: 1)
+        UINavigationBar.appearance().tintColor = #colorLiteral(red: 1, green: 0.7658156157, blue: 0, alpha: 1)
+        UINavigationBar.appearance().barTintColor = #colorLiteral(red: 0.1532945335, green: 0.1665433645, blue: 0.184310317, alpha: 1)
+        UITabBar.appearance().barTintColor = #colorLiteral(red: 0.1532945335, green: 0.1665433645, blue: 0.184310317, alpha: 1)
+        UILabel.appearance().textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        let textAttributes = [NSAttributedStringKey.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
+        UINavigationBar.appearance().titleTextAttributes = textAttributes
+
         window.rootViewController = tabController
         window.makeKeyAndVisible()
         self.window = window // cursed code

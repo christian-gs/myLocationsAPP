@@ -21,6 +21,7 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
     private var addressLabel = UILabel()
     private var tagButton = UIButton()
     private var getButton = UIButton()
+    private var imageView = UIImageView()
     //user location
     private let locationManager = CLLocationManager()
     private var location: CLLocation?
@@ -38,34 +39,33 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         title = "Current Location"
+        view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
 
-        messageLabel.text = "(Tap 'Get My Location' to Start)"
         messageLabel.textAlignment = .center
         latitudeTextLabel.text = "Latitude: "
         latitudeTextLabel.textAlignment = .left
         latitudeValueLabel.text = ""
         latitudeValueLabel.textAlignment = .right
+        latitudeValueLabel.font = UIFont.boldSystemFont(ofSize: 17)
         longitudeTextLabel.text = "Longitude: "
         longitudeTextLabel.textAlignment = .left
         longitudeValueLabel.text = ""
         longitudeValueLabel.textAlignment = .right
-        addressLabel.text = "(Address goes here)"
+        longitudeValueLabel.font = UIFont.boldSystemFont(ofSize: 17)
         addressLabel.textAlignment = .left
         addressLabel.numberOfLines = 0
         tagButton.setTitle("Tag Location", for: .normal)
-        tagButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         tagButton.isHidden = true
         tagButton.addTarget(self, action: #selector(openLocationDetailsViewController), for: .touchUpInside)
         getButton.setTitle("Get My Location", for: .normal)
-        getButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         getButton.addTarget(self, action: #selector(getLocation), for: .touchUpInside)
+        imageView.image = #imageLiteral(resourceName: "camera")
 
-        for label in [messageLabel, latitudeTextLabel, latitudeValueLabel, longitudeTextLabel,
-                      longitudeValueLabel, addressLabel, tagButton, getButton] as [UIView] {
-            label.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(label)
+        for v in [messageLabel, latitudeTextLabel, latitudeValueLabel, longitudeTextLabel,
+                      longitudeValueLabel, addressLabel, tagButton, getButton, imageView] as! [UIView]{
+            v.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(v)
         }
 
         NSLayoutConstraint.activate([
@@ -94,6 +94,11 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
 
             tagButton.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 30),
             tagButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            imageView.bottomAnchor.constraint(equalTo: getButton.topAnchor, constant: -50),
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: 200),
+            imageView.widthAnchor.constraint(equalToConstant: 200),
 
             getButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             getButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)

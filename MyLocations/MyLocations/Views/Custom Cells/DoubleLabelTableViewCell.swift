@@ -21,6 +21,7 @@ class DoubleLabelTableViewCell: UITableViewCell
         self.rightLabel.text = "Detail"
         
         for label in [leftLabel, rightLabel] {
+            label.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             label.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview(label)
         }
@@ -31,6 +32,8 @@ class DoubleLabelTableViewCell: UITableViewCell
             rightLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30),
             rightLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
             ])
+
+        contentView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         
     }
     

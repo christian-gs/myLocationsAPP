@@ -58,6 +58,8 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+
         navigationController?.navigationBar.tintColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelTapped))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
@@ -191,6 +193,34 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
         return 44
     }
 
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
+    }
+    
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        let label = UILabel()
+
+        label.frame = CGRect(x: 10, y: 0, width: view.bounds.width, height: 30)
+        label.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+
+        if section == 0 {
+            label.text = "DESCRIPTION"
+        }
+        if section == 1 {
+            label.text = "PHOTO"
+        }
+        if section == 2 {
+            label.text = "LOCATION DETAILS"
+        }
+
+        headerView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        headerView.addSubview(label)
+        return headerView
+    }
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
 
@@ -208,19 +238,6 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
             break
         }
 
-    }
-
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "DESCRIPTION"
-        }
-        if section == 1 {
-            return "PHOTO"
-        }
-        if section == 2 {
-            return "LOCATION DETAILS"
-        }
-        return ""
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
