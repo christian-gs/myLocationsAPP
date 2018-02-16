@@ -12,6 +12,7 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
     private var date = Date()
     private var address: String
     private var locationToEdit: Location?
+    private var imageChanged = false
     private var image: UIImage? {
         didSet {
             let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! SelectViaViewTableViewCell
@@ -111,11 +112,15 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
         location.address = self.address
         location.photoID = nil
         // Save image
-        if let image = image {
+        if var image = image {
             if !location.hasPhoto {
                 location.photoID = Location.nextPhotoID() as NSNumber
             }
-            if let data = UIImageJPEGRepresentation(image, 0.5) {
+            //only shrink the image if it has been changed
+            if imageChanged {
+                image = image.resized(withBounds:  CGSize(width: 260, height: 260))
+            }
+            if let data =  UIImageJPEGRepresentation(image, 0.5) {
                 do {
                     try data.write(to: location.photoURL, options: .atomic)
                 } catch {
@@ -370,6 +375,7 @@ extension LocationDetailsViewController:
     // MARK:- Image Picker Delegates
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         image = info[UIImagePickerControllerEditedImage] as? UIImage
+        imageChanged = true
         dismiss(animated: true, completion: nil)
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

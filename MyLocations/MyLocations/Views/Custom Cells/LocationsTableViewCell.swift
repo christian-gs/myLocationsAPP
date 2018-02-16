@@ -18,7 +18,7 @@ class LocationsTableViewCell: UITableViewCell {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
 
         mainLabel.font = UIFont.boldSystemFont(ofSize: 17)
-        locationImageView.contentMode = .scaleAspectFit
+        locationImageView.contentMode = .scaleAspectFill
 
         for view in [mainLabel, subLabel, locationImageView] as [UIView] {
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +27,8 @@ class LocationsTableViewCell: UITableViewCell {
 
         NSLayoutConstraint.activate([
             locationImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            locationImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            locationImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            locationImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             locationImageView.heightAnchor.constraint(equalToConstant: 66),
             locationImageView.widthAnchor.constraint(equalToConstant: 66),
             mainLabel.leadingAnchor.constraint(equalTo: locationImageView.trailingAnchor, constant: 20),

@@ -42,7 +42,7 @@ class LocationsViewController: UITableViewController {
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.estimatedRowHeight = 60
+        tableView.estimatedRowHeight = 66
         tableView.tableFooterView = UIView()
         tableView.register(LocationsTableViewCell.self, forCellReuseIdentifier: "locationsCell")
     }
@@ -107,10 +107,6 @@ class LocationsViewController: UITableViewController {
             }
         }
 
-    }
-
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 66
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

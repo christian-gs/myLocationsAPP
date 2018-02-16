@@ -21,6 +21,7 @@ class SelectViaViewTableViewCell: UITableViewCell
         self.mainLabel.text = "Press to Select"
         self.selectedLabel.text = ""
         self.selectedImageView.isHidden = true
+        self.selectedImageView.contentMode = .scaleAspectFit
 
         for subView in [mainLabel, selectedLabel, selectedImageView] as [UIView] {
             subView.translatesAutoresizingMaskIntoConstraints = false
