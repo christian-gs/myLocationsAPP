@@ -9,8 +9,9 @@
 import UIKit
 import CoreLocation
 import CoreData
+import AudioToolbox
 
-class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
+class CurrentLocationController: UIViewController, CLLocationManagerDelegate, CAAnimationDelegate  {
 
     //UIViews
     private var messageLabel = UILabel()
@@ -22,6 +23,21 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
     private var tagButton = UIButton()
     private var getButton = UIButton()
     private var imageView = UIImageView()
+    //animations
+    private var detailsView = UIView()
+    var logoVisible = true
+    lazy var logoButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setBackgroundImage(UIImage(named: "camera"), for: .normal)
+        button.sizeToFit()
+        button.addTarget(self, action: #selector(getLocation), for: .touchUpInside)
+        button.frame = CGRect(x: view.center.x , y: view.center.y, width: 250 , height: 250)
+        button.center.x = self.view.bounds.midX
+        button.center.y = view.center.y - 50
+        return button
+    }()
+    //sound
+    var soundID: SystemSoundID = 0
     //user location
     private let locationManager = CLLocationManager()
     private var location: CLLocation?
@@ -58,51 +74,68 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
         tagButton.setTitle("Tag Location", for: .normal)
         tagButton.isHidden = true
         tagButton.addTarget(self, action: #selector(openLocationDetailsViewController), for: .touchUpInside)
+        tagButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25.0)
         getButton.setTitle("Get My Location", for: .normal)
         getButton.addTarget(self, action: #selector(getLocation), for: .touchUpInside)
-        imageView.image = #imageLiteral(resourceName: "camera")
+        getButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25.0)
+        getButton.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+        detailsView.backgroundColor = .clear
 
         for v in [messageLabel, latitudeTextLabel, latitudeValueLabel, longitudeTextLabel,
-                      longitudeValueLabel, addressLabel, tagButton, getButton, imageView] as! [UIView]{
+                      longitudeValueLabel, addressLabel, tagButton] as! [UIView]{
             v.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(v)
+            detailsView.addSubview(v)
         }
 
         NSLayoutConstraint.activate([
-            messageLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-            messageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            messageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            messageLabel.topAnchor.constraint(equalTo: detailsView.topAnchor, constant: 30),
+            messageLabel.leadingAnchor.constraint(equalTo: detailsView.leadingAnchor),
+            messageLabel.trailingAnchor.constraint(equalTo: detailsView.trailingAnchor),
+            messageLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 20),
 
             latitudeTextLabel.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 40),
-            latitudeTextLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            latitudeTextLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20),
+            latitudeTextLabel.leadingAnchor.constraint(equalTo: detailsView.leadingAnchor, constant: 20),
+            latitudeTextLabel.trailingAnchor.constraint(equalTo: detailsView.trailingAnchor, constant: 20),
 
             latitudeValueLabel.topAnchor.constraint(equalTo: latitudeTextLabel.topAnchor),
-            latitudeValueLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant:-20),
+            latitudeValueLabel.trailingAnchor.constraint(equalTo: detailsView.trailingAnchor, constant:-20),
 
             longitudeTextLabel.topAnchor.constraint(equalTo: latitudeTextLabel.bottomAnchor, constant: 10),
             longitudeTextLabel.leadingAnchor.constraint(equalTo: latitudeTextLabel.leadingAnchor),
             longitudeTextLabel.trailingAnchor.constraint(equalTo: latitudeTextLabel.trailingAnchor),
 
             longitudeValueLabel.topAnchor.constraint(equalTo: longitudeTextLabel.topAnchor),
-            longitudeValueLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            longitudeValueLabel.trailingAnchor.constraint(equalTo: detailsView.trailingAnchor, constant: -20),
 
             addressLabel.topAnchor.constraint(equalTo: longitudeTextLabel.bottomAnchor, constant: 20),
-            addressLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            addressLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20),
+            addressLabel.leadingAnchor.constraint(equalTo: detailsView.leadingAnchor, constant: 20),
+            addressLabel.trailingAnchor.constraint(equalTo: detailsView.trailingAnchor, constant: 20),
             addressLabel.heightAnchor.constraint(equalToConstant: 50),
 
             tagButton.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 30),
-            tagButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            tagButton.centerXAnchor.constraint(equalTo: detailsView.centerXAnchor),
+            tagButton.bottomAnchor.constraint(equalTo: detailsView.bottomAnchor)
+            ])
 
-            imageView.bottomAnchor.constraint(equalTo: getButton.topAnchor, constant: -50),
-            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 200),
-            imageView.widthAnchor.constraint(equalToConstant: 200),
+        for v in  [detailsView, getButton] {
+            v.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(v)
+        }
+
+        NSLayoutConstraint.activate([
+            detailsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            detailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            detailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             getButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             getButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30)
         ])
+
+        //prep animation
+        view.addSubview(logoButton)
+        detailsView.isHidden = true
+
+        loadSoundEffect("sounds/sound.mp3")
     }
 
     @objc func openLocationDetailsViewController() {
@@ -122,6 +155,10 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
         if authStatus == .denied || authStatus == .restricted {
             showLocationServicesDeniedAlert()
             return
+        }
+        //hide logo
+        if logoVisible {
+            hideLogoView()
         }
         //start/stop searching for user location
         if updatingLocation {
@@ -169,10 +206,102 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
                 statusMessage = "Searching..."
             } else {
                 statusMessage = "Tap 'Get My Location' to Start"
+                showLogoView()
             }
             messageLabel.text = statusMessage
         }
         configureGetButton()
+    }
+
+
+    func showLogoView() {
+        if !logoVisible {
+            logoVisible = true
+            view.addSubview(logoButton)
+
+            //move logo off left side of screen
+            logoButton.center.x = -view.bounds.size.width
+            logoButton.center.y = logoButton.center.y
+
+
+            //animate logo sliding in
+            let logoMover = CABasicAnimation(keyPath: "position")
+            logoMover.isRemovedOnCompletion = false
+            logoMover.fillMode = kCAFillModeForwards
+            logoMover.duration = 0.5
+            logoMover.fromValue = NSValue(cgPoint: logoButton.center)
+            logoMover.toValue = NSValue(cgPoint: CGPoint(x: view.bounds.midX, y: view.center.y - 50))
+            logoMover.timingFunction = CAMediaTimingFunction( name: kCAMediaTimingFunctionEaseIn)
+            logoButton.layer.add(logoMover, forKey: "logoMover")
+
+            //animate logo rotating
+            let logoRotator = CABasicAnimation(keyPath:"transform.rotation.z")
+            logoRotator.isRemovedOnCompletion = false
+            logoRotator.fillMode = kCAFillModeForwards
+            logoRotator.duration = 0.5
+            logoRotator.fromValue = 0.0
+            logoRotator.toValue = 2 * Double.pi
+            logoRotator.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
+            logoButton.layer.add(logoRotator, forKey: "logoRotator")
+
+            //animate detailsView slideing out
+            let panelMover = CABasicAnimation(keyPath: "position")
+            panelMover.isRemovedOnCompletion = false
+            panelMover.fillMode = kCAFillModeForwards
+            panelMover.duration = 0.6
+            panelMover.fromValue = NSValue(cgPoint: detailsView.center)
+            panelMover.toValue = NSValue(cgPoint:CGPoint(x: view.bounds.midX * 3, y: detailsView.center.y))
+            panelMover.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+            panelMover.delegate = self
+            detailsView.layer.add(panelMover, forKey: "panelMover")
+
+            logoButton.center.x = self.view.bounds.midX
+            logoButton.center.y = view.center.y - 50
+        }
+    }
+
+    func hideLogoView() {
+        guard logoVisible else { return }
+
+        logoVisible = false
+        detailsView.isHidden = false
+
+        //move details view off to right side of screen
+        detailsView.center.x = view.bounds.size.width * 2
+
+        //animate detailsView slideing in
+        let centerX = view.bounds.midX
+        let panelMover = CABasicAnimation(keyPath: "position")
+        panelMover.isRemovedOnCompletion = false
+        panelMover.fillMode = kCAFillModeForwards
+        panelMover.duration = 0.6
+        panelMover.fromValue = NSValue(cgPoint: detailsView.center)
+        panelMover.toValue = NSValue(cgPoint:CGPoint(x: centerX, y: detailsView.center.y))
+        panelMover.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        panelMover.delegate = self
+        detailsView.layer.add(panelMover, forKey: "panelMover")
+
+        //animate logo sliding out
+        let logoMover = CABasicAnimation(keyPath: "position")
+        logoMover.isRemovedOnCompletion = false
+        logoMover.fillMode = kCAFillModeForwards
+        logoMover.duration = 0.5
+        logoMover.fromValue = NSValue(cgPoint: logoButton.center)
+        logoMover.toValue = NSValue(cgPoint: CGPoint(x: -centerX, y: logoButton.center.y))
+        logoMover.timingFunction = CAMediaTimingFunction( name: kCAMediaTimingFunctionEaseIn)
+        logoButton.layer.add(logoMover, forKey: "logoMover")
+
+        //animate logo rotating
+        let logoRotator = CABasicAnimation(keyPath:"transform.rotation.z")
+        logoRotator.isRemovedOnCompletion = false
+        logoRotator.fillMode = kCAFillModeForwards
+        logoRotator.duration = 0.5
+        logoRotator.fromValue = 0.0
+        logoRotator.toValue = -2 * Double.pi
+        logoRotator.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
+        logoButton.layer.add(logoRotator, forKey: "logoRotator")
+
+        detailsView.center.x = centerX
     }
 
     func string(from placemark: CLPlacemark) -> String {
@@ -195,10 +324,22 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
     }
 
     func configureGetButton() {
+        let spinnerTag = 1000
         if updatingLocation {
             getButton.setTitle("Stop", for: .normal)
+            if view.viewWithTag(spinnerTag) == nil {
+                let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+                spinner.center = messageLabel.center
+                spinner.center.y += 30
+                spinner.startAnimating()
+                spinner.tag = spinnerTag
+                detailsView.addSubview(spinner)
+            }
         } else {
             getButton.setTitle("Get My Location", for: .normal)
+            if let spinner = view.viewWithTag(spinnerTag) {
+                spinner.removeFromSuperview()
+            }
         }
     }
 
@@ -232,6 +373,25 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
             lastLocationError = NSError( domain: "MyLocationsErrorDomain", code: 1, userInfo: nil)
             updateLabels()
         }
+    }
+
+    // MARK:- Sound effects
+    func loadSoundEffect(_ name: String) {
+        if let path = Bundle.main.path(forResource: name, ofType: nil) {
+            let fileURL = URL(fileURLWithPath: path, isDirectory: false)
+            let error = AudioServicesCreateSystemSoundID(fileURL as CFURL, &soundID)
+            if error != kAudioServicesNoError {
+                print("Error code \(error) loading sound: \(path)")
+            }
+        }
+    }
+    func unloadSoundEffect() {
+        AudioServicesDisposeSystemSoundID(soundID)
+        soundID = 0
+    }
+
+    func playSoundEffect() {
+        AudioServicesPlaySystemSound(soundID)
     }
 
     // MARK: - CLLocationManagerDelegate
@@ -277,6 +437,9 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
                 geocoder.reverseGeocodeLocation(newLocation, completionHandler: { (placemarks: [CLPlacemark]?, error: Error?) in
                     self.lastGeocodingError = error
                     if error == nil, let p = placemarks, !p.isEmpty {
+                        if self.placemark == nil {
+                            self.playSoundEffect()
+                        }
                         self.placemark = p.last!
                     } else {
                         self.placemark = nil
@@ -304,6 +467,20 @@ class CurrentLocationController: UIViewController, CLLocationManagerDelegate  {
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         present(alert, animated: true, completion: nil)
         alert.addAction(okAction)
+    }
+
+    // MARK:- Animation Delegate Methods
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        detailsView.layer.removeAllAnimations()
+        logoButton.layer.removeAllAnimations()
+
+        if logoVisible {
+            detailsView.isHidden = true
+        }
+        else if !detailsView.isHidden {
+            logoButton.removeFromSuperview()
+        }
+
     }
 
 }

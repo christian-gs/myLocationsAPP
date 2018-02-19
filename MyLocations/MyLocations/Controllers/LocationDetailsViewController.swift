@@ -47,7 +47,7 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
     deinit {
         print("*** deinit \(self)")
         if observer != nil {
-            NotificationCenter.default.removeObserver(observer)
+            NotificationCenter.default.removeObserver(observer!)
         }
     }
 
@@ -190,7 +190,6 @@ class LocationDetailsViewController: UITableViewController, CategoryPickerViewCo
         default:
             return 44
         }
-        return 44
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

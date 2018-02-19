@@ -32,17 +32,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let tabController = UITabBarController()
         let currentLocationViewController = CurrentLocationController()
-        currentLocationViewController.tabBarItem = UITabBarItem(title: "Current Location", image: #imageLiteral(resourceName: "first") , selectedImage: #imageLiteral(resourceName: "first") )
+        currentLocationViewController.tabBarItem = UITabBarItem(title: "Current Location", image: #imageLiteral(resourceName: "pin") , selectedImage: #imageLiteral(resourceName: "pin") )
         currentLocationViewController.managedObjectContext = self.managedObjectContext //coreData
         let currentLocationNavController = UINavigationController(rootViewController: currentLocationViewController)
 
         let locationsViewController = LocationsViewController()
-        locationsViewController.tabBarItem = UITabBarItem(title: "Saved Locations", image: #imageLiteral(resourceName: "second"), selectedImage: #imageLiteral(resourceName: "second") )
+        locationsViewController.tabBarItem = UITabBarItem(title: "Saved Locations", image: #imageLiteral(resourceName: "list"), selectedImage: #imageLiteral(resourceName: "list") )
         locationsViewController.managedObjectContext = self.managedObjectContext
         let locationsNavController = UINavigationController(rootViewController: locationsViewController)
 
         let mapViewController = MapViewController()
-        mapViewController.tabBarItem = UITabBarItem(title: "Map", image: #imageLiteral(resourceName: "first"), selectedImage: #imageLiteral(resourceName: "first") )
+        mapViewController.tabBarItem = UITabBarItem(title: "Map", image: #imageLiteral(resourceName: "globe"), selectedImage: #imageLiteral(resourceName: "globe"))
         mapViewController.managedObjectContext = self.managedObjectContext
         let mapNavController = UINavigationController(rootViewController: mapViewController)
         tabController.viewControllers = [currentLocationNavController, locationsNavController, mapNavController]
@@ -56,6 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let textAttributes = [NSAttributedStringKey.foregroundColor:#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
         UINavigationBar.appearance().titleTextAttributes = textAttributes
 
+        
         window.rootViewController = tabController
         window.makeKeyAndVisible()
         self.window = window // cursed code

@@ -23,6 +23,7 @@
 		AA1D4A11202D64FD00E6221D /* LocationDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D4A10202D64FD00E6221D /* LocationDetailsViewController.swift */; };
 		AA1D4A16202D64FD00E6221D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA1D4A15202D64FD00E6221D /* Assets.xcassets */; };
 		AA1D4A21202D6AD600E6221D /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA1D4A20202D6AD600E6221D /* Launch Screen.storyboard */; };
+		AA2648A9203A4C24005D8AE0 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = AA2648A8203A4C24005D8AE0 /* sounds */; };
 		AA3F3FB62031645700920014 /* SelectViaViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3F3FB42031645700920014 /* SelectViaViewTableViewCell.swift */; };
 		AA3F3FB72031645700920014 /* DoubleLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3F3FB52031645700920014 /* DoubleLabelTableViewCell.swift */; };
 		AA3F3FB9203164DB00920014 /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3F3FB8203164DB00920014 /* TextViewTableViewCell.swift */; };
@@ -47,6 +48,7 @@
 		AA1D4A15202D64FD00E6221D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA1D4A1A202D64FD00E6221D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA1D4A20202D6AD600E6221D /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		AA2648A8203A4C24005D8AE0 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		AA3F3FB42031645700920014 /* SelectViaViewTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectViaViewTableViewCell.swift; sourceTree = "<group>"; };
 		AA3F3FB52031645700920014 /* DoubleLabelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleLabelTableViewCell.swift; sourceTree = "<group>"; };
 		AA3F3FB8203164DB00920014 /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				AA1D4A0C202D64FD00E6221D /* AppDelegate.swift */,
 				AA1BAD772032B119006C43FF /* DataModel.xcdatamodeld */,
 				AA1D4A15202D64FD00E6221D /* Assets.xcassets */,
+				AA2648A8203A4C24005D8AE0 /* sounds */,
 				AA1D4A1A202D64FD00E6221D /* Info.plist */,
 				AA1BAD7E2032B8A2006C43FF /* Functions.swift */,
 				AA1C22EF2033B8540068A79D /* Controllers */,
@@ -205,6 +208,7 @@
 			files = (
 				AA1D4A21202D6AD600E6221D /* Launch Screen.storyboard in Resources */,
 				AA1D4A16202D64FD00E6221D /* Assets.xcassets in Resources */,
+				AA2648A9203A4C24005D8AE0 /* sounds in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,7 +351,7 @@
 		AA1D4A1E202D64FD00E6221D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FNW7L4X44S;
 				INFOPLIST_FILE = MyLocations/Info.plist;
@@ -363,7 +367,7 @@
 		AA1D4A1F202D64FD00E6221D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FNW7L4X44S;
 				INFOPLIST_FILE = MyLocations/Info.plist;
